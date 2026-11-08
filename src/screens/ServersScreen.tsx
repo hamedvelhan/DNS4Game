@@ -1,56 +1,15 @@
-import { Fragment } from "react";
 import { useApp } from "../store";
 import { CATALOG } from "../data/catalog";
 import { availability } from "../lib/probe";
-import { NativeAdCard, ServerCard } from "../components/ServerCard";
-import { AD_CONFIG } from "../ads/adManager";
+import { ServerCard } from "../components/ServerCard";
 import { ScannerScreen } from "./ScannerScreen";
-import type { Tab } from "../App";
-
-export function ServersScreen({ go }: { go: (t: Tab) => void }) {
-  const { metrics, selectedId, connectToServer, settings, op, connected, isPremium } = useApp();
-
-  const handleServer = async (id: string) => {
-    const ok = await connectToServer(id);
-    if (ok) go("home");
-  };
-
-  return (
-    <div className="page-enter space-y-4">
-      <div>
-        <h2 className="text-lg font-bold tracking-wide">سرورهای بازی</h2>
-        <p className="mt-0.5 text-[11px] text-slate-400">روی هر سرور بزن تا تبلیغ ببینی و مستقیم وصل شی.</p>
-      </div>
-
-      <ScannerScreen compact onConnected={() => go("home")} />
-
-      {connected && !isPremium && (
-        <p className="rounded-xl border border-cyan/20 bg-cyan/5 px-3 py-2 text-[11px] leading-5 text-cyan/90">
-          برای تعویض سرور، ویدیوی جایزه‌ای پخش می‌شود. بعد از پاداش، سرور عوض می‌شود.
-        </p>
-      )}
-      {connected && isPremium && (
-        <p className="rounded-xl border border-emerald-400/20 bg-emerald-400/5 px-3 py-2 text-[11px] text-emerald-200">
-          اشتراک فعال است؛ تغییر سرور بدون تبلیغ.
-        </p>
-      )}
-
-      <div className="space-y-2.5 pb-2">
-        {CATALOG.map((p, i) => (
-          <Fragment key={p.id}>
-            <ServerCard
-              p={p}
-              m={metrics[p.id]}
-              avail={availability(p, settings.preview)}
-              selected={p.id === selectedId}
-              busy={!!op}
-              delay={i}
-              onSelect={() => handleServer(p.id)}
-            />
-            {i === AD_CONFIG.nativeAfterIndex - 1 && !isPremium && <NativeAdCard />}
-          </Fragment>
-        ))}
-      </div>
-    </div>
-  );
+import { RadioTower } from "lucide-react";
+export function ServersScreen() {
+  const { metrics, selectedId, selectServer, settings, op } = useApp();
+  return <div className="page-enter space-y-3">
+    <div className="flex items-end justify-between gap-3"><div><div className="flex items-center gap-2"><RadioTower className="h-4 w-4 text-cyan" /><h2 className="text-lg font-extrabold">سرورهای بازی</h2></div><p className="mt-0.5 text-[10px] text-slate-500">برای نمایش تبلیغ و اتصال، هر جای کارت سرور را لمس کنید.</p></div><span className="rounded-full border border-cyan/20 bg-cyan/[0.06] px-2.5 py-1 text-[9px] tabular-nums text-cyan-100">{CATALOG.length} پروفایل</span></div>
+    <ScannerScreen />
+    <div className="flex items-center justify-between px-1 pt-1"><span className="text-[11px] font-bold text-slate-300">فهرست سرورها</span><span className="text-[9px] text-slate-500">Jitter · پایداری</span></div>
+    <div className="space-y-2.5 pb-2">{CATALOG.map((p, i) => <ServerCard key={p.id} p={p} m={metrics[p.id]} avail={availability(p, settings.preview)} selected={p.id === selectedId} busy={!!op} delay={i} onSelect={() => void selectServer(p.id)} />)}</div>
+  </div>;
 }
