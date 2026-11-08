@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Chakra Petch", "Vazirmatn", system-ui, sans-serif;
+  --font-fa: "Vazirmatn", "Chakra Petch", system-ui, sans-serif;
+  --color-ink: #070a12;
+  --color-panel: #0c101c;
+  --color-panel2: #12182a;
+  --color-line: #1e2744;
+  --color-cyan: #22d3ee;
+  --color-blue: #4f7cff;
+  --color-violet: #a78bfa;
+}
+
+html, body, #root { height: 100%; }
+body {
+  background: #04060c;
+  color: #e8ecf8;
+  font-family: var(--font-fa);
+  direction: rtl;
+  text-align: right;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+.fa { font-family: var(--font-fa); direction: rtl; }
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.92); opacity: 0.6; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+@keyframes drift {
+  0%, 100% { background-position: 0% 40%; }
+  50% { background-position: 100% 60%; }
+}
+@keyframes page-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes pop {
+  0% { transform: scale(0.85); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+@keyframes sweep {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(220%); }
+}
+
+.pulse-ring { animation: pulse-ring 2.4s ease-out infinite; }
+.spin-slow { animation: spin-slow 8s linear infinite; }
+.drift { animation: drift 18s ease-in-out infinite; }
+.page-enter { animation: page-enter 0.35s ease-out both; }
+.pop { animation: pop 0.35s cubic-bezier(.2,1.4,.4,1) both; }
+.shake { animation: shake 0.4s ease-in-out; }
+.sweep { animation: sweep 2.2s ease-in-out infinite; }
+
+[data-anim="off"] .deco,
+[data-anim="paused"] .deco { animation-play-state: paused !important; }
+[data-anim="off"] .page-enter,
+[data-anim="off"] .pop { animation: none !important; }
+
+.scroll-hide { scrollbar-width: none; }
+.scroll-hide::-webkit-scrollbar { display: none; }
+
+.glass {
+  background: linear-gradient(160deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015));
+  border: 1px solid rgba(255,255,255,0.07);
+  backdrop-filter: blur(12px);
+}
+
+.bg-ink { background: #070a12; }
+.bg-panel { background: #0c101c; }
+.border-line { border-color: #1e2744; }
+.text-cyan { color: #22d3ee; }
+.text-blue { color: #4f7cff; }
+.bg-cyan\/15 { background: rgba(34,211,238,0.15); }
+.bg-blue\/15 { background: rgba(79,124,255,0.15); }
+.bg-violet\/15 { background: rgba(167,139,250,0.15); }
